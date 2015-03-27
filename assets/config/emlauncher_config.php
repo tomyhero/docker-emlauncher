@@ -17,7 +17,7 @@ $emlauncher_config = array(
                 'aws' => array(
                         'key' => '{{EMLAUNCHER_AWS_KEY}}',
                         'secret' => '{{EMLAUNCHER_AWS_SECRET}}',
-                        'region' => {{EMLAUNCHER_AWS_REGION}},
+                        'region' => Aws\Common\Enum\Region::TOKYO,
                         'bucket_name' => '{{EMLAUNCHER_AWS_BUCKET_NAME}}',
                         ),
                 ),

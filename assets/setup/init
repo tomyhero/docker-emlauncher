@@ -6,7 +6,7 @@ EMLAUNCHER_HOME="/home/emlauncher"
 ASSETS_DIR="/app/assets"
 
 EMLAUNCHER_LOGIN_ENABLE_PASSWORD=${EMLAUNCHER_LOGIN_ENABLE_PASSWORD:-true}
-EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH=${EMLAUNCHER_LOGIN_ENABLE_PASSWORD:-false}
+EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH=${EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH:-false}
 EMLAUNCHER_LOGIN_GOOGLE_APP_ID=${EMLAUNCHER_LOGIN_GOOGLE_APP_ID:-}
 EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET=${EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET:-}
 EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN=${EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN:-}
@@ -32,6 +32,8 @@ sed 's/{{EMLAUNCHER_AWS_SECRET}}/'"${EMLAUNCHER_AWS_SECRET}"'/' -i /app/assets/c
 sed 's/{{EMLAUNCHER_AWS_REGION}}/'"${EMLAUNCHER_AWS_REGION}"'/' -i /app/assets/config/emlauncher_config.php
 sed 's/{{EMLAUNCHER_AWS_BUCKET_NAME}}/'"${EMLAUNCHER_AWS_BUCKET_NAME}"'/' -i /app/assets/config/emlauncher_config.php
 
+# i know this is not good way.
+sed -e "17i 'region' => '${EMLAUNCHER_AWS_REGION}'," -i /home/emlauncher/model/S3.php
 
 ln -s /app/assets/config/emlauncher_config.php /home/emlauncher/config/
 ln -s /app/assets/config/mfw_serverenv_config.php /home/emlauncher/config/
@@ -39,12 +41,10 @@ ln -s /app/assets/config/dbauth /home/emlauncher/config/dbauth
 ln -s /app/assets/apache2/default.conf /etc/apache2/sites-enabled/
 
 
-
 service apache2 start
 service memcached start
 
-sendmailconfig -y
+yes | sendmailconfig
 service sendmail start
-
 
 exec bash
