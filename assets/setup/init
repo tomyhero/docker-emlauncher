@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e
+
+EMLAUNCHER_HOME="/home/emlauncher"
+ASSETS_DIR="/app/assets"
+
+EMLAUNCHER_LOGIN_ENABLE_PASSWORD=${EMLAUNCHER_LOGIN_ENABLE_PASSWORD:-true}
+EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH=${EMLAUNCHER_LOGIN_ENABLE_PASSWORD:-false}
+EMLAUNCHER_LOGIN_GOOGLE_APP_ID=${EMLAUNCHER_LOGIN_GOOGLE_APP_ID:-}
+EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET=${EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET:-}
+EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN=${EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN:-}
+
+EMLAUNCHER_AWS_KEY=${EMLAUNCHER_AWS_KEY:-yyyy}
+EMLAUNCHER_AWS_SECRET=${EMLAUNCHER_AWS_SECRET:-yyyyy}
+EMLAUNCHER_AWS_REGION=${EMLAUNCHER_AWS_REGION:-}
+EMLAUNCHER_AWS_BUCKET_NAME=${EMLAUNCHER_AWS_BUCKET_NAME:-emlauncher}
+
+DB_HOST=${DB_HOST:-}
+
+
+sed 's/{{DB_HOST}}/'"${DB_HOST}"'/' -i /app/assets/config/mfw_serverenv_config.php
+
+sed 's/{{EMLAUNCHER_LOGIN_ENABLE_PASSWORD}}/'"${EMLAUNCHER_LOGIN_ENABLE_PASSWORD}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH}}/'"${EMLAUNCHER_LOGIN_ENABLE_GOOGLE_AUTH}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_LOGIN_GOOGLE_APP_ID}}/'"${EMLAUNCHER_LOGIN_GOOGLE_APP_ID}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET}}/'"${EMLAUNCHER_LOGIN_GOOGLE_APP_SECRET}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN}}/'"${EMLAUNCHER_LOGIN_ALLOWED_MAILADDR_PATTERN}"'/' -i /app/assets/config/emlauncher_config.php
+
+sed 's/{{EMLAUNCHER_AWS_KEY}}/'"${EMLAUNCHER_AWS_KEY}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_AWS_SECRET}}/'"${EMLAUNCHER_AWS_SECRET}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_AWS_REGION}}/'"${EMLAUNCHER_AWS_REGION}"'/' -i /app/assets/config/emlauncher_config.php
+sed 's/{{EMLAUNCHER_AWS_BUCKET_NAME}}/'"${EMLAUNCHER_AWS_BUCKET_NAME}"'/' -i /app/assets/config/emlauncher_config.php
+
+
+ln -s /app/assets/config/emlauncher_config.php /home/emlauncher/config/
+ln -s /app/assets/config/mfw_serverenv_config.php /home/emlauncher/config/
+ln -s /app/assets/config/dbauth /home/emlauncher/config/dbauth
+ln -s /app/assets/apache2/default.conf /etc/apache2/sites-enabled/
+
+
+
+service apache2 start
+service memcached start
+
+sendmailconfig -y
+service sendmail start
+
+
+exec bash
