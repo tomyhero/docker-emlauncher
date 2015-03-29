@@ -4,7 +4,7 @@ MAINTAINER tomohiro.teranishi@gmail.com
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y vim php5 php5-mysql apache2 git memcached php5-memcache php5-imagick php5-curl sendmail
+RUN apt-get install -y vim php5 php5-mysql apache2 git memcached php5-memcache php5-imagick php5-curl sendmail get unzip
 
 # apache2
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
