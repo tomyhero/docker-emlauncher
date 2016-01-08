@@ -17,8 +17,12 @@ EMLAUNCHER_AWS_REGION=${EMLAUNCHER_AWS_REGION:-}
 EMLAUNCHER_AWS_BUCKET_NAME=${EMLAUNCHER_AWS_BUCKET_NAME:-emlauncher}
 
 DB_HOST=${DB_HOST:-}
+DB_USER=${DB_USER:-emlauncher}
+DB_PASSWORD=${DB_PASSWORD:-password}
 
 
+sed 's/{{DB_USER}}/'"${DB_USER}"'/' -i /app/assets/config/dbauth
+sed 's/{{DB_PASSWORD}}/'"${DB_PASSWORD}"'/' -i /app/assets/config/dbauth
 sed 's/{{DB_HOST}}/'"${DB_HOST}"'/' -i /app/assets/config/mfw_serverenv_config.php
 
 sed 's/{{EMLAUNCHER_LOGIN_ENABLE_PASSWORD}}/'"${EMLAUNCHER_LOGIN_ENABLE_PASSWORD}"'/' -i /app/assets/config/emlauncher_config.php

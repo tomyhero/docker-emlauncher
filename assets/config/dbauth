@@ -1,1 +1,1 @@
-emlauncher:password
+{{DB_USER}}:{{DB_PASSWORD}}
